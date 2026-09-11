@@ -17,3 +17,30 @@ function renderWeather(data) {
 ${day.condition}</p>`) 
     .join(''); 
 } 
+
+function renderWeekForecast() {
+    fetch('data/week-forecast.json')
+        .then(response => response.json())
+        .then(days => {
+            const grid = document.getElementById('week-forecast-grid');
+            grid.innerHTML = days.map(d => `
+                <div class="day-card">
+                    <div class="day-name">${d.day}</div>
+                    <div class="icon">${skyIcon(d.sky)}</div>
+                    <div class="temp">${d.temp}°C</div>
+                </div>
+            `).join('');
+        });
+}
+
+function skyIcon(sky) {
+    const icons = {
+        'Сонячно': '☀',
+        'Ясно': '🌤',
+        'Хмарно': '☁',
+        'Дощ': '🌧'
+    };
+    return icons[sky] || '';
+}
+
+document.addEventListener('DOMContentLoaded', renderWeekForecast);
